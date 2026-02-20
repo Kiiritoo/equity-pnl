@@ -1,0 +1,16 @@
+{
+  "/(dashboard)/calendar/page": "/calendar",
+  "/(dashboard)/dashboard/page": "/dashboard",
+  "/(dashboard)/trades/page": "/trades",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/api/auth/login/route": "/api/auth/login",
+  "/api/auth/logout/route": "/api/auth/logout",
+  "/api/auth/me/route": "/api/auth/me",
+  "/api/auth/register/route": "/api/auth/register",
+  "/api/trades/route": "/api/trades",
+  "/api/user/settings/route": "/api/user/settings",
+  "/login/page": "/login",
+  "/page": "/",
+  "/register/page": "/register"
+}

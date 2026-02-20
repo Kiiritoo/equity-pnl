@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 46, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/dorman/Desktop/pnl/app/api/auth/logout/route.js"],"sourcesContent":["import { NextResponse } from 'next/server';\r\nimport { cookies } from 'next/headers';\r\n\r\nexport async function POST() {\r\n    const cookieStore = await cookies();\r\n    cookieStore.delete('auth_token');\r\n    return NextResponse.json({ message: 'Logged out successfully' });\r\n}\r\n"],"names":[],"mappings":";;;;AAAA;AACA;;;AAEO,eAAe;IAClB,MAAM,cAAc,MAAM,IAAA,4IAAO;IACjC,YAAY,MAAM,CAAC;IACnB,OAAO,gJAAY,CAAC,IAAI,CAAC;QAAE,SAAS;IAA0B;AAClE"}}]
+}
