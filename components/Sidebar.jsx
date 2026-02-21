@@ -12,9 +12,11 @@ import {
     Sun,
     Clock,
     LogOut,
-    Globe
+    Globe,
+    Wallet
 } from 'lucide-react';
 import { useTrades, TIME_ZONES, COMMON_CURRENCIES } from '@/context/TradeContext';
+import WithdrawalModal from './WithdrawalModal';
 
 const Sidebar = ({ onImportClick, mobileOpen, setMobileOpen }) => {
     const {
@@ -23,8 +25,10 @@ const Sidebar = ({ onImportClick, mobileOpen, setMobileOpen }) => {
         updateSettings,
         timeZone,
         theme,
-        user
+        user,
+        addWithdrawal
     } = useTrades();
+    const [isWithdrawalOpen, setIsWithdrawalOpen] = useState(false);
     const pathname = usePathname();
 
     const menuItems = [
@@ -40,6 +44,11 @@ const Sidebar = ({ onImportClick, mobileOpen, setMobileOpen }) => {
 
     return (
         <>
+            <WithdrawalModal
+                isOpen={isWithdrawalOpen}
+                onClose={() => setIsWithdrawalOpen(false)}
+                onAdd={addWithdrawal}
+            />
             <div className={`sidebar-overlay ${mobileOpen ? 'active' : ''}`} onClick={() => setMobileOpen(false)}></div>
             <aside className={`app-sidebar ${mobileOpen ? 'mobile-open' : ''}`}>
                 <div className="sidebar-header">
@@ -69,6 +78,10 @@ const Sidebar = ({ onImportClick, mobileOpen, setMobileOpen }) => {
                     <button className="nav-item" onClick={() => { onImportClick(); setMobileOpen(false); }}>
                         <Import size={20} />
                         <span>Import Trades</span>
+                    </button>
+                    <button className="nav-item" onClick={() => { setIsWithdrawalOpen(true); setMobileOpen(false); }}>
+                        <Wallet size={20} />
+                        <span>Add Withdrawal</span>
                     </button>
                 </nav>
 

@@ -45,14 +45,23 @@ const EquityChart = ({ data }) => {
                     <p style={{ color: 'var(--accent-primary)', fontWeight: 'bold' }}>
                         Balance: {formatCurrency(payload[0].value)}
                     </p>
-                    {payload[0].payload.dailyProfit !== undefined && (
+                    {payload[0].payload.dailyProfit !== undefined && payload[0].payload.dailyProfit !== 0 && (
                         <p style={{
                             color: payload[0].payload.dailyProfit >= 0 ? 'var(--success)' : 'var(--danger)',
                             fontSize: '12px',
                             marginTop: '4px'
                         }}>
-                            Daily: {payload[0].payload.dailyProfit >= 0 ? '+' : ''}
+                            Daily PnL: {payload[0].payload.dailyProfit >= 0 ? '+' : ''}
                             {formatCurrency(payload[0].payload.dailyProfit).replace('-', '')}
+                        </p>
+                    )}
+                    {payload[0].payload.withdrawal !== undefined && payload[0].payload.withdrawal !== 0 && (
+                        <p style={{
+                            color: 'var(--text-muted)',
+                            fontSize: '12px',
+                            marginTop: '4px'
+                        }}>
+                            Withdrawal: -{formatCurrency(payload[0].payload.withdrawal).replace('-', '')}
                         </p>
                     )}
                 </div>

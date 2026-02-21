@@ -33,6 +33,7 @@ export const TIME_ZONES = [
 export const TradeProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [trades, setTrades] = useState([]);
+    const [withdrawals, setWithdrawals] = useState([]);
     const [initialBalance, setInitialBalance] = useState(0);
     const [currency, setCurrency] = useState('USD');
     const [timeZone, setTimeZone] = useState('UTC');
@@ -53,6 +54,7 @@ export const TradeProvider = ({ children }) => {
                     setTimeZone(data.user.timeZone || 'UTC');
                     setTheme(data.user.theme || 'light');
                     fetchTrades();
+                    fetchWithdrawals();
                 } else {
                     setUser(null);
                 }
@@ -75,6 +77,70 @@ export const TradeProvider = ({ children }) => {
             }
         } catch (err) {
             console.error('Fetch trades failed:', err);
+        }
+    };
+
+    const fetchWithdrawals = async () => {
+        try {
+            const res = await fetch('/api/withdrawals');
+            if (res.ok) {
+                const data = await res.json();
+                setWithdrawals(data.withdrawals);
+            }
+        } catch (err) {
+            console.error('Fetch withdrawals failed:', err);
+        }
+    };
+
+    const addWithdrawal = async (withdrawalData) => {
+        try {
+            const res = await fetch('/api/withdrawals', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(withdrawalData)
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setWithdrawals(prev => [data.withdrawal, ...prev]);
+                return true;
+            }
+            return false;
+        } catch (err) {
+            console.error('Add withdrawal failed:', err);
+            return false;
+        }
+    };
+
+    const updateWithdrawal = async (withdrawalData) => {
+        try {
+            const res = await fetch('/api/withdrawals', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(withdrawalData)
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setWithdrawals(prev => prev.map(w => w.id === data.withdrawal.id ? data.withdrawal : w));
+                return true;
+            }
+            return false;
+        } catch (err) {
+            console.error('Update withdrawal failed:', err);
+            return false;
+        }
+    };
+
+    const deleteWithdrawal = async (id) => {
+        try {
+            const res = await fetch(`/api/withdrawals?id=${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                setWithdrawals(prev => prev.filter(w => w.id !== id));
+                return true;
+            }
+            return false;
+        } catch (err) {
+            console.error('Delete withdrawal failed:', err);
+            return false;
         }
     };
 
@@ -133,6 +199,7 @@ export const TradeProvider = ({ children }) => {
         <TradeContext.Provider value={{
             user,
             trades,
+            withdrawals,
             initialBalance,
             currency,
             timeZone,
@@ -141,7 +208,12 @@ export const TradeProvider = ({ children }) => {
             error,
             logout,
             fetchTrades,
+            fetchWithdrawals,
+            addWithdrawal,
+            updateWithdrawal,
+            deleteWithdrawal,
             setTrades,
+            setWithdrawals,
             updateSettings,
             formatDate,
             formatCurrency,

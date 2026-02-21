@@ -26,6 +26,7 @@ model User {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   trades         Trade[]
+  withdrawals    Withdrawal[]
 }
 
 model Trade {
@@ -44,5 +45,17 @@ model Trade {
   createdAt  DateTime @default(now())
 
   @@unique([userId, ticket])
+  @@index([userId])
+}
+
+model Withdrawal {
+  id        String   @id @default(cuid())
+  amount    Float
+  date      DateTime
+  note      String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
   @@index([userId])
 }

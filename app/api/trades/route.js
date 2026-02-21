@@ -64,10 +64,11 @@ export async function DELETE(request) {
         const all = searchParams.get('all');
 
         if (all === 'true') {
-            await prisma.trade.deleteMany({
-                where: { userId: payload.userId },
-            });
-            return NextResponse.json({ message: 'All trades deleted' });
+            await prisma.$transaction([
+                prisma.trade.deleteMany({ where: { userId: payload.userId } }),
+                prisma.withdrawal.deleteMany({ where: { userId: payload.userId } })
+            ]);
+            return NextResponse.json({ message: 'All trades and withdrawals deleted' });
         }
 
         if (id) {

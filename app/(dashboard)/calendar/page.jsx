@@ -21,13 +21,13 @@ import { getDailyPerformance } from '@/lib/utils/pnlEngine';
 import DayDetailsModal from '@/components/DayDetailsModal';
 
 export default function Calendar() {
-    const { trades, initialBalance, timeZone, formatCurrency } = useTrades();
+    const { trades, withdrawals, initialBalance, timeZone, formatCurrency } = useTrades();
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
 
     const performanceData = useMemo(() =>
-        getDailyPerformance(trades, initialBalance, timeZone),
-        [trades, initialBalance, timeZone]);
+        getDailyPerformance(trades, withdrawals, initialBalance, timeZone),
+        [trades, withdrawals, initialBalance, timeZone]);
 
     // Monthly summary calculation
     const monthlySummary = useMemo(() => {
